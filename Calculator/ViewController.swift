@@ -23,6 +23,40 @@ class ViewController: UIViewController {
         print("digit = \(digit)")
     }
     
+    @IBAction func operate(sender: UIButton) {
+        if userIsInTheMiddleOfTypingNumber {
+            enter()
+        }
+        
+        let operation = sender.currentTitle!
+        switch operation {
+        case "+" : performOperation({$0 + $1})
+        case "-" : performOperation({$1 - $0})
+        case "✕" : performOperation({$1 * $0})
+        case "÷" : performOperation({$1 / $0})
+        case "√" : performOperation2({sqrt($0)})
+        default:
+            break
+        }
+    }
+    
+    func performOperation (operation: (Double , Double) -> Double){
+        if operateStack.count >= 2 {
+            displayValue = operation(operateStack.removeLast(), operateStack.removeLast())
+            enter()
+        }
+        
+    }
+    
+    func performOperation2 (operation: Double -> Double){
+        if operateStack.count >= 1 {
+            displayValue = operation(operateStack.removeLast())
+            enter()
+        }
+        
+    }
+    
+    
     var operateStack = Array<Double>()
     
     @IBAction func enter() {
